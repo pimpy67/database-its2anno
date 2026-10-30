@@ -1,0 +1,29 @@
+services:
+  db:
+    image: postgres:18
+    container_name: scuolachill-db
+    environment:
+      POSTGRES_USER: scuolachill
+      POSTGRES_PASSWORD: chill2026
+      POSTGRES_DB: scuolachill
+    ports:
+      - "5432:5432"
+    volumes:
+      - scuolachill-data:/var/lib/postgresql
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: scuolachill-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@scuolachill.it
+      PGADMIN_DEFAULT_PASSWORD: chill2026
+    ports:
+      - "5050:80"
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+    depends_on:
+      - db
+
+volumes:
+  scuolachill-data:
+  pgadmin-data:
