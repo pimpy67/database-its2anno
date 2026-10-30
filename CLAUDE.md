@@ -19,6 +19,15 @@
 - Vedere il codice SQLSTATE degli errori in psql: `\set VERBOSITY verbose`
 - Inizio lavoro: `git pull`. Fine lavoro: `git add .` → `git commit -m "..."` → `git push`.
 
+## Ambiente ScuolaChill (lezione sulle JOIN)
+- Cartella `scuolachill-db/` con `compose.yaml` (si avvia con `docker compose up -d` da quella cartella).
+- Container `scuolachill-db` (PostgreSQL 18): utente `scuolachill`, database `scuolachill`, password nel `compose.yaml`.
+- pgAdmin nel browser su `http://localhost:5050` (in italiano: "Strumento di query", Alt+Shift+Q; prima cliccare sul database `scuolachill`). Dopo uno script l'albero non si aggiorna: tasto destro su Tables → Refresh.
+- Anche PC Windows con PowerShell: lì `<` non funziona, il reset si esegue con
+  `Get-Content reset_join.sql | docker exec -i scuolachill-db psql -U scuolachill -d scuolachill`
+- `scuolachill-db/reset_join.sql` = script di reset del docente per le JOIN (non modificarlo). Il controllo finale deve dare 3, 4, 6, 6.
+- Appunti personali su Notion: pagina "🧭 Percorso SQL e Database: dalle basi alla pratica", sezione "Tappa 6 bis" (teoria del reset, pgAdmin, alias, metodo in 6 passi per scegliere le JOIN, esercizi con soluzioni a scomparsa).
+
 ## File
 - `esercizio1.sql` = **script di reset** del docente (SENZA classe_id). Non modificarlo: si rilancia per ripartire da zero.
 - `esercizio1_query.sql` = query di prova con JOIN.
@@ -47,7 +56,18 @@ ALTER TABLE studenti ADD CONSTRAINT fk_studenti_classe FOREIGN KEY (classe_id) R
 DELETE FROM classi WHERE id = 4;
 ```
 
-## Avanzamento
+## Lezione attuale: "Cinque query per esercitarti con le JOIN" (ScuolaChill)
+Metodo del docente: prevedere il numero di righe, poi scrivere la query; se non torna, rileggere dal `FROM`.
+Non dare le soluzioni: guidare con il metodo in 6 passi (mostrare → filtrare → tabelle → percorso sulla mappa → una JOIN per freccia → JOIN o LEFT JOIN) e far completare uno schema con `___`.
+
+- [x] Reset ScuolaChill (3, 4, 6, 6)
+- [ ] 1. La classe della 2B (nome, cognome, email; 3 righe attese) — risultato non ancora confermato
+- [x] 2. I docenti di Luca — previsione 3 righe, corretta. Capito: `dc` è l'alias di docenti_classi, le ore stanno nella tabella ponte. Domanda bonus ("serve la tabella classi?") ancora senza risposta
+- [ ] 3. Chi coordina ogni classe — **si riparte da qui**: deve scrivere i passi 1-4 del metodo prima della query (indizio: la parola «tutte» → LEFT JOIN)
+- [ ] 4. Il docente che non coordina
+- [ ] 5. La scheda completa (due LEFT JOIN)
+
+## Avanzamento lezione "Le relazioni tra tabelle"
 - [x] 1. Reset
 - [x] 2. Collega gli studenti alle classi
 - [x] 3. Il database dice no — previsioni 5 su 5 corrette (errori 23503; la 3A, id 4, è stata cancellata)
